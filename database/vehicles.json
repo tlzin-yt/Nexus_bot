@@ -1,0 +1,47 @@
+{
+    "krieger": {
+        "name": "Benefactor Krieger",
+        "class": "Super",
+        "price": "$2.875.000",
+        "topSpeed": "127.25 mph",
+        "lapTime": "0:59.135",
+        "source": "Legendary Motorsport",
+        "image": "https://static.wikia.nocookie.net/gtawiki/images/images/Krieger.png"
+    },
+    "tempesta": {
+        "name": "Pegassi Tempesta",
+        "class": "Super",
+        "price": "$1.329.000",
+        "topSpeed": "125.00 mph",
+        "lapTime": "1:01.320",
+        "source": "Legendary Motorsport",
+        "image": "https://static.wikia.nocookie.net/gtawiki/images/images/Tempesta.png"
+    },
+    "emerus": {
+        "name": "Progen Emerus",
+        "class": "Super",
+        "price": "$2.750.000",
+        "topSpeed": "127.25 mph",
+        "lapTime": "0:59.327",
+        "source": "Legendary Motorsport",
+        "image": "https://static.wikia.nocookie.net/gtawiki/images/images/Emerus.png"
+    },
+    "pariah": {
+        "name": "Ocelot Pariah",
+        "class": "Sports",
+        "price": "$1.420.000",
+        "topSpeed": "136.00 mph",
+        "lapTime": "1:00.814",
+        "source": "Legendary Motorsport",
+        "image": "https://static.wikia.nocookie.net/gtawiki/images/images/Pariah.png"
+    },
+    "zentorno": {
+        "name": "Pegassi Zentorno",
+        "class": "Super",
+        "price": "$725.000",
+        "topSpeed": "122.00 mph",
+        "lapTime": "1:00.960",
+        "source": "Legendary Motorsport",
+        "image": "https://static.wikia.nocookie.net/gtawiki/images/images/Zentorno.png"
+    }
+}
