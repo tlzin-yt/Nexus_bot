@@ -14,12 +14,13 @@ module.exports = {
         const query = interaction.options.getString('nome').toLowerCase().trim();
         const vehicle = vehicles[query];
 
-        if (!vehicle) {
+                if (!vehicle) {
             return interaction.reply({ 
-                content: `❌ Veículo "${query}" não encontrado no banco de dados.`, 
+                content: `❌ Veículo **"${query}"** não foi encontrado no banco de dados. Verifique se digitou o nome corretamente em inglês (ex: \`tempesta\`, \`krieger\`, \`pariah\`).`, 
                 ephemeral: true 
             });
         }
+ 
 
         const embed = new EmbedBuilder()
             .setColor('#002B49')
