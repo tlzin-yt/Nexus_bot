@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const vehicles = require('../database/vehicles');
+const vehicles = require('../database/vehicles.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -23,7 +23,7 @@ module.exports = {
 
         if (!v1 || !v2) {
             return interaction.reply({ 
-                content: `❌ Um ou ambos os veículos informados não foram encontrados. Verifique os nomes digitados (ex: \`krieger\`, \`pariah\`, \`emerus\`, \`buffalo stx\`).`, 
+                content: `❌ Um ou ambos os veículos informados não foram encontrados no banco de dados.`, 
                 ephemeral: true 
             });
         }
@@ -42,4 +42,3 @@ module.exports = {
         await interaction.reply({ embeds: [embed] });
     },
 };
-
