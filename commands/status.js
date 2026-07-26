@@ -6,8 +6,8 @@ module.exports = {
         .setDescription('Mostra as estatísticas e o desempenho atual do bot.'),
 
     async execute(interaction) {
-        // Calcula o tempo online (Uptime) em segundos, minutos, horas e dias
-        const totalSeconds = (clientInstance || interaction.client).uptime / 1000;
+        // Usa interaction.client para pegar o uptime corretamente
+        const totalSeconds = interaction.client.uptime / 1000;
         const days = Math.floor(totalSeconds / 86400);
         const hours = Math.floor(totalSeconds / 3600) % 24;
         const minutes = Math.floor(totalSeconds / 60) % 60;
