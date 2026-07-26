@@ -15,6 +15,8 @@ module.exports = {
                 .setRequired(true)),
 
     async execute(interaction) {
+        await interaction.deferReply();
+
         const q1 = interaction.options.getString('veiculo1').toLowerCase().trim();
         const q2 = interaction.options.getString('veiculo2').toLowerCase().trim();
 
@@ -22,9 +24,8 @@ module.exports = {
         const v2 = vehicles[q2];
 
         if (!v1 || !v2) {
-            return interaction.reply({ 
-                content: `❌ Um ou ambos os veículos informados não foram encontrados no banco de dados.`, 
-                ephemeral: true 
+            return interaction.editReply({ 
+                content: `❌ Um ou ambos os veículos informados não foram encontrados no banco de dados.` 
             });
         }
 
@@ -39,6 +40,6 @@ module.exports = {
             .setFooter({ text: 'Nexus Bot • Comparador de Veículos' })
             .setTimestamp();
 
-        await interaction.reply({ embeds: [embed] });
+        await interaction.editReply({ embeds: [embed] });
     },
 };
