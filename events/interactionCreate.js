@@ -1,7 +1,4 @@
 if (interaction.isStringSelectMenu() && interaction.customId === 'select_negocio') {
-    // 1. Responde instantaneamente ao Discord avisando que o bot está carregando
-    await interaction.deferUpdate();
-
     const choice = interaction.values[0];
     let embed = new EmbedBuilder().setColor('#002B49').setTimestamp();
 
@@ -74,6 +71,6 @@ if (interaction.isStringSelectMenu() && interaction.customId === 'select_negocio
                 { name: '⭐ Melhor Missão', value: 'The Union Depository Contract.', inline: true });
     }
 
-    // 2. Edita a mensagem original mantendo o menu ativo com editReply
-    return await interaction.editReply({ embeds: [embed], components: interaction.message.components });
+    // Usa diretamente o interaction.update para responder de forma imediata sem timeouts
+    return await interaction.update({ embeds: [embed], components: interaction.message.components });
 }
