@@ -11,21 +11,23 @@ module.exports = {
                 .setRequired(true)),
 
     async execute(interaction) {
-        // Evita que o Discord dê erro de tempo excedido enquanto busca
         await interaction.deferReply();
 
         const query = interaction.options.getString('nome').toLowerCase().trim();
-        const vehicle = vehicles[query];
+        
+        // Busca exata ou por aproximação no JSON
+        let vehicleKey = Object.keys(vehicles).find(k => k === query || vehicles[k].name.toLowerCase().includes(query));
+        let vehicle = vehicleKey ? vehicles[vehicleKey] : null;
 
         if (!vehicle) {
             return interaction.editReply({ 
-                content: `❌ Veículo **"${query}"** não foi encontrado no banco de dados. Verifique se digitou o nome corretamente em inglês (ex: \`tempesta\`, \`krieger\`, \`pariah\`).` 
+                content: `❌ Veículo **"${query}"** não foi encontrado no banco de dados. Tente pesquisar por: \`tempesta\`, \`krieger\`, \`pariah\`, \`emerus\` ou \`zentorno\`.` 
             });
         }
 
         const embed = new EmbedBuilder()
             .setColor('#002B49')
-            .setTitle(`🚗 ${vehicle.name || 'Veículo'}`)
+            .setTitle(`🚗 ${vehicle.name}`)
             .setDescription(`Informações detalhadas do veículo no GTA Online.`)
             .addFields(
                 { name: '📂 Classe', value: vehicle.class || 'Desconhecida', inline: true },
@@ -44,4 +46,3 @@ module.exports = {
         await interaction.editReply({ embeds: [embed] });
     },
 };
-
