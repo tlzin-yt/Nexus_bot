@@ -36,16 +36,15 @@ module.exports = {
         }
 
         const embed = new EmbedBuilder()
-            .setColor(''#002B49')
-            .setTitle('💵 Calculadora de Divisão de Golpes - GTA Online')
+            .setColor('#002B49')
+            .setTitle('💵 Calculadora de Divisão - GTA Online')
             .addFields(
                 { name: '💰 Faturamento Total', value: `$${total.toLocaleString('pt-BR')}`, inline: false },
-                { name: '👑 Líder', value: `${pctLider}% (=\$${valorLider.toLocaleString('pt-BR')})`, inline: true },
-                { name: `👥 Demais Membros (${membrosRestantes} jog.)`, value: `=\$${valorPorMembro.toLocaleString('pt-BR')} cada`, inline: true }
+                { name: '👑 Líder', value: `${pctLider}% ($${valorLider.toLocaleString('pt-BR')})`, inline: true },
+                { name: `👥 Demais Membros (${membrosRestantes} jog.)`, value: `$${valorPorMembro.toLocaleString('pt-BR')} cada`, inline: true }
             )
             .setTimestamp();
 
         await interaction.reply({ embeds: [embed] });
     },
 };
-
