@@ -3,6 +3,7 @@ const http = require('http');
 const fs = require('node:fs');
 const path = require('node:path');
 require('dotenv').config();
+require('./services/vehicleUpdater');
 
 // Mini servidor web para manter o Render gratuito
 const server = http.createServer((req, res) => {
