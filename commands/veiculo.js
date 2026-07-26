@@ -7,31 +7,32 @@ module.exports = {
         .setDescription('Mostra as informações completas de um veículo do GTA Online.')
         .addStringOption(option =>
             option.setName('nome')
-                .setDescription('Nome do veículo (ex: krieger, pariah, emerus)')
+                .setDescription('Nome do veículo (ex: tempesta, krieger, pariah)')
                 .setRequired(true)),
 
     async execute(interaction) {
+        // Evita que o Discord dê erro de tempo excedido enquanto busca
+        await interaction.deferReply();
+
         const query = interaction.options.getString('nome').toLowerCase().trim();
         const vehicle = vehicles[query];
 
-                if (!vehicle) {
-            return interaction.reply({ 
-                content: `❌ Veículo **"${query}"** não foi encontrado no banco de dados. Verifique se digitou o nome corretamente em inglês (ex: \`tempesta\`, \`krieger\`, \`pariah\`).`, 
-                ephemeral: true 
+        if (!vehicle) {
+            return interaction.editReply({ 
+                content: `❌ Veículo **"${query}"** não foi encontrado no banco de dados. Verifique se digitou o nome corretamente em inglês (ex: \`tempesta\`, \`krieger\`, \`pariah\`).` 
             });
         }
- 
 
         const embed = new EmbedBuilder()
             .setColor('#002B49')
-            .setTitle(`🚗 ${vehicle.name}`)
+            .setTitle(`🚗 ${vehicle.name || 'Veículo'}`)
             .setDescription(`Informações detalhadas do veículo no GTA Online.`)
             .addFields(
-                { name: '📂 Classe', value: vehicle.class, inline: true },
-                { name: '💵 Preço', value: vehicle.price, inline: true },
-                { name: '🌐 Loja', value: vehicle.source, inline: true },
-                { name: '⚡ Velocidade Máxima', value: vehicle.topSpeed, inline: true },
-                { name: '⏱️ Tempo de Volta', value: vehicle.lapTime, inline: true }
+                { name: '📂 Classe', value: vehicle.class || 'Desconhecida', inline: true },
+                { name: '💵 Preço', value: vehicle.price || 'Indisponível', inline: true },
+                { name: '🌐 Loja', value: vehicle.source || 'Indisponível', inline: true },
+                { name: '⚡ Velocidade Máxima', value: vehicle.topSpeed || 'Não testada', inline: true },
+                { name: '⏱️ Tempo de Volta', value: vehicle.lapTime || 'Não testado', inline: true }
             )
             .setFooter({ text: 'Nexus Bot • Banco de Dados de Veículos' })
             .setTimestamp();
@@ -40,6 +41,7 @@ module.exports = {
             embed.setThumbnail(vehicle.image);
         }
 
-        await interaction.reply({ embeds: [embed] });
+        await interaction.editReply({ embeds: [embed] });
     },
 };
+
