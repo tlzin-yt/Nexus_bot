@@ -19,7 +19,7 @@ module.exports = {
         const falta = alvo - atual;
 
         const embed = new EmbedBuilder()
-            .setColor('#FFA500')
+            .setColor(''#002B49')
             .setTitle('🎯 Calculadora de Meta - GTA Online')
             .addFields(
                 { name: '🏦 Dinheiro Atual', value: `$${atual.toLocaleString('pt-BR')}`, inline: true },
