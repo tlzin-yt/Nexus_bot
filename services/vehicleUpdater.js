@@ -5,12 +5,13 @@ const path = require('path');
 const dbPath = path.join(__dirname, '../database/vehicles.json');
 
 async function updateVehicleDatabase() {
-    console.log('🔄 [Auto-Update] Verificando atualizações de veículos...');
+    console.log('🔄 [Auto-Update] Baixando lista completa de veículos...');
     try {
+        // Usando uma fonte pública estável com o JSON completo de veículos
         const response = await fetch('https://raw.githubusercontent.com/gtabase/gta-online-vehicles/main/vehicles.json').catch(() => null);
         
         if (!response || !response.ok) {
-            console.log('⚠️ [Auto-Update] Fonte temporariamente indisponível. Mantendo banco atual.');
+            console.log('⚠️ [Auto-Update] Não foi possível baixar a lista nova. Mantendo atual.');
             return;
         }
 
@@ -22,6 +23,9 @@ async function updateVehicleDatabase() {
     }
 }
 
+// Executa assim que o bot liga na nuvem
+updateVehicleDatabase();
+
 // Agendado para toda quinta-feira às 09:00 da manhã
 cron.schedule('0 9 * * 4', () => {
     console.log('📅 [Cron] Quinta-feira 09:00 - Executando atualização semanal...');
@@ -32,4 +36,3 @@ cron.schedule('0 9 * * 4', () => {
 });
 
 module.exports = { updateVehicleDatabase };
-
