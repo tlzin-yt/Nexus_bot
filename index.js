@@ -1,3 +1,4 @@
+require('./api.js');
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const http = require('http');
 const fs = require('node:fs');
