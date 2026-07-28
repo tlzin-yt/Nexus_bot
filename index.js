@@ -1,8 +1,13 @@
 const express = require('express');
+const { Client, GatewayIntentBits } = require('discord.js'); // Certifique-se de importar o Client
+
 const app = express();
 const PORT = process.env.PORT || 10000;
 
 app.use(express.json());
+
+// Inicializa o cliente do Discord (adicione os intents que seu bot usa)
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
 // Rota da API de veículos integrada
 app.get('/api/veiculos', async (req, res) => {
@@ -24,5 +29,10 @@ app.listen(PORT, () => {
     console.log(`🚀 Servidor e API rodando na porta ${PORT}`);
 });
 
-// A partir daqui você inicia o seu bot do Discord normalmente (ex: client.login(...))
+// Evento quando o bot estiver pronto (opcional, mas bom para saber)
+client.once('ready', () => {
+    console.log(`🤖 Bot conectado como ${client.user.tag}`);
+});
+
+// Faz o login do bot usando o token do ambiente
 client.login(process.env.TOKEN);
