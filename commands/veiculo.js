@@ -1,48 +1,59 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const vehicles = require('../database/vehicles.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('veiculo')
-        .setDescription('Mostra as informações completas de um veículo do GTA Online.')
+        .setDescription('Busca informações de qualquer veículo do GTA Online na API')
         .addStringOption(option =>
             option.setName('nome')
-                .setDescription('Nome do veículo (ex: tempesta, krieger, pariah)')
+                .setDescription('Nome do veículo que você quer procurar')
                 .setRequired(true)),
 
     async execute(interaction) {
+        // Deixa o bot "pensando" para evitar o erro de timeout de 3 segundos do Discord
         await interaction.deferReply();
 
-        const query = interaction.options.getString('nome').toLowerCase().trim();
-        
-        // Busca exata ou por aproximação no JSON
-        let vehicleKey = Object.keys(vehicles).find(k => k === query || vehicles[k].name.toLowerCase().includes(query));
-        let vehicle = vehicleKey ? vehicles[vehicleKey] : null;
+        const nomePesquisado = interaction.options.getString('nome').toLowerCase();
 
-        if (!vehicle) {
-            return interaction.editReply({ 
-                content: `❌ Veículo **"${query}"** não foi encontrado no banco de dados. Tente pesquisar por: \`tempesta\`, \`krieger\`, \`pariah\`, \`emerus\` ou \`zentorno\`.` 
-            });
+        try {
+            // Puxa os dados da sua própria API rodando no Render (ou use localhost se estiver testando local)
+            const respostaApi = await fetch('https://nexus-bot-55ha.onrender.com/api/veiculos');
+            const dados = await respostaApi.json();
+
+            if (!dados.sucesso || !dados.veiculos) {
+                return interaction.editReply('❌ Erro ao se conectar com a base de dados dos veículos.');
+            }
+
+            // Procura o veículo na lista completa da API (procura por partes do nome)
+            const veiculoEncontrado = dados.veiculos.find(v => 
+                v.nome.toLowerCase().includes(nomePesquisado)
+            );
+
+            if (!veiculoEncontrado) {
+                return interaction.editReply(`❌ O veículo **"${nomePesquisado}"** não foi encontrado na base de dados geral.`);
+            }
+
+            // Formata o preço para o padrão em dinheiro (Ex: $1,420,000)
+            const precoFormatado = veiculoEncontrado.preco 
+                ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(veiculoEncontrado.preco) 
+                : 'Preço indisponível';
+
+            // Cria um Embed bonito para enviar no chat
+            const embed = new EmbedBuilder()
+                .setTitle(`🚗 ${veiculoEncontrado.nome}`)
+                .setColor('#00FF00')
+                .addFields(
+                    { name: 'Categoria', value: veiculoEncontrado.categoria || 'Geral', inline: true },
+                    { name: 'Preço', value: precoFormatado, inline: true },
+                    { name: 'Loja / Fabricante', value: veiculoEncontrado.fabricante || 'Desconhecido', inline: true }
+                )
+                .setTimestamp();
+
+            return interaction.editReply({ embeds: [embed] });
+
+        } catch (error) {
+            console.error(error);
+            return interaction.editReply('❌ Ocorreu um erro ao tentar buscar o veículo.');
         }
-
-        const embed = new EmbedBuilder()
-            .setColor('#002B49')
-            .setTitle(`🚗 ${vehicle.name}`)
-            .setDescription(`Informações detalhadas do veículo no GTA Online.`)
-            .addFields(
-                { name: '📂 Classe', value: vehicle.class || 'Desconhecida', inline: true },
-                { name: '💵 Preço', value: vehicle.price || 'Indisponível', inline: true },
-                { name: '🌐 Loja', value: vehicle.source || 'Indisponível', inline: true },
-                { name: '⚡ Velocidade Máxima', value: vehicle.topSpeed || 'Não testada', inline: true },
-                { name: '⏱️ Tempo de Volta', value: vehicle.lapTime || 'Não testado', inline: true }
-            )
-            .setFooter({ text: 'Nexus Bot • Banco de Dados de Veículos' })
-            .setTimestamp();
-
-        if (vehicle.image) {
-            embed.setThumbnail(vehicle.image);
-        }
-
-        await interaction.editReply({ embeds: [embed] });
     },
 };
