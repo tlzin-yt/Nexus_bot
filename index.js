@@ -39,21 +39,15 @@ const client = new Client({
 
 client.commands = new Collection();
 
-// Carregador automático de comandos (procura na pasta commands)
-const foldersPath = path.join(__dirname, 'commands');
-if (fs.existsSync(foldersPath)) {
-    const commandFolders = fs.readdirSync(foldersPath);
-    for (const folder of commandFolders) {
-        const commandsPath = path.join(foldersPath, folder);
-        if (fs.statSync(commandsPath).isDirectory()) {
-            const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-            for (const file of commandFiles) {
-                const filePath = path.join(commandsPath, file);
-                const command = require(filePath);
-                if ('data' in command && 'execute' in command) {
-                    client.commands.set(command.data.name, command);
-                }
-            }
+// Carregador automático de comandos (direto da pasta commands)
+const commandsPath = path.join(__dirname, 'commands');
+if (fs.existsSync(commandsPath)) {
+    const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+    for (const file of commandFiles) {
+        const filePath = path.join(commandsPath, file);
+        const command = require(filePath);
+        if ('data' in command && 'execute' in command) {
+            client.commands.set(command.data.name, command);
         }
     }
 }
